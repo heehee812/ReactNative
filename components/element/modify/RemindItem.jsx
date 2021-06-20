@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react'
-import { FlatList, SafeAreaView, StatusBar,View, Text, TouchableOpacity, TextInput, StyleSheet, TouchableHighlight } from 'react-native'
+import { FlatList, SafeAreaView, StatusBar, View, Text, TouchableOpacity, TextInput, StyleSheet, TouchableHighlight } from 'react-native'
 
 import PropTypes, { any, string } from 'prop-types'
 import { connect } from 'react-redux';
@@ -11,24 +11,24 @@ import { itemDanger } from '../../states/post-actions.js';
 
 const DATA = [
    {
-     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-     title: "Entering",
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      title: "Entering",
    },
    {
-     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-     title: "Leaving",
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      title: "Leaving",
    },
- ];
- 
- const Item = ({ item, onPress, backgroundColor, textColor }) => (
+];
+
+const Item = ({ item, onPress, backgroundColor, textColor }) => (
    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-     <Text style={[styles.title, textColor]}>{item.title}</Text>
+      <Text style={[styles.title, textColor]}>{item.title}</Text>
    </TouchableOpacity>
- );
+);
 
 
 class Inputs extends Component {
-   
+
    static propTypes = {
       id: PropTypes.string,
       inputValue: PropTypes.string,
@@ -37,7 +37,7 @@ class Inputs extends Component {
       entering: PropTypes.bool,
       itemDanger: PropTypes.bool,
       dispatch: PropTypes.func
-  };
+   };
 
    constructor(props) {
       super(props);
@@ -45,109 +45,109 @@ class Inputs extends Component {
       this.handleItemChange = this.handleItemChange.bind(this);
       this.handleSet = this.handleSet.bind(this);
       this.saveItem = this.saveItem.bind(this);
-  }
+   }
 
    render() {
-       
-    const { id, leaving, entering } = this.props;
-    let leave = (leaving ? true : false);
-    let enter = (entering ? true : false);
-   
-    return (
-       <View>
-       <View style = {styles.container}>
-          <TouchableOpacity
-             style = {styles.deleteButton}
-             onPress = {
-                () => this.handleSet('delete')
-             }>
-             <Text style = {styles.submitButtonText}> Delete </Text>
-          </TouchableOpacity>
 
-          <TextInput style = {styles.input}
-             underlineColorAndroid = "transparent"
-             placeholder = "Iterm Name"
-             placeholderTextColor = "#4A4444"
-             autoCapitalize = "none"
-             onChangeText = {this.handleItemChange}/>
+      const { id, leaving, entering } = this.props;
+      let leave = (leaving ? true : false);
+      let enter = (entering ? true : false);
 
-         <TouchableOpacity
-            style={ enter===true? styles.deleteButton : styles.enterANDleavingButton}
-            onPress = {
-               () => this.handleSet('entering')
-            }>
+      return (
+         <View>
+            <View style={styles.container}>
+               <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={
+                     () => this.handleSet('delete')
+                  }>
+                  <Text style={styles.submitButtonText}> Delete </Text>
+               </TouchableOpacity>
 
-            
-             <Text style = {styles.submitButtonText}> Entering </Text>
-         </TouchableOpacity>
+               <TextInput style={styles.input}
+                  underlineColorAndroid="transparent"
+                  placeholder="Iterm Name"
+                  placeholderTextColor="#4A4444"
+                  autoCapitalize="none"
+                  onChange={this.handleItemChange} />
 
-          <TouchableOpacity
-             style={ leave===true? styles.deleteButton : styles.enterANDleavingButton}
-             onPress = {
-                () => this.handleSet('leaving')
-             }>
-            
-             <Text style = {styles.submitButtonText}> Leaving </Text>
-          </TouchableOpacity>
+               <TouchableOpacity
+                  style={enter === true ? styles.deleteButton : styles.enterANDleavingButton}
+                  onPress={
+                     () => this.handleSet('entering')
+                  }>
 
-       </View>
-       </View>
-    )
- }
+
+                  <Text style={styles.submitButtonText}> Entering </Text>
+               </TouchableOpacity>
+
+               <TouchableOpacity
+                  style={leave === true ? styles.deleteButton : styles.enterANDleavingButton}
+                  onPress={
+                     () => this.handleSet('leaving')
+                  }>
+
+                  <Text style={styles.submitButtonText}> Leaving </Text>
+               </TouchableOpacity>
+
+            </View>
+         </View>
+      )
+   }
 
    componentDidMount() {
       const itemRef = () => this.props;
       itemRef(this);
-  }
-  componentWillUnmount() {
+   }
+   componentWillUnmount() {
       const itemRef = () => this.props;
       itemRef(undefined);
-  }
-   
+   }
+
    handleItemChange(e) {
       const text = e.target.value
       this.props.dispatch(inputItemName(this.props.id, text));
       if (text && this.props.itemDanger) {
-          this.props.dispatch(itemDanger(this.props.id, false));
+         this.props.dispatch(itemDanger(this.props.id, false));
       }
-  }
-   
+   }
+
    handleSet(setting) {
       //console.log("hi")
       if (setting != 'delete') {
-          this.props.dispatch(createSet(this.props.id, setting));
-          this.props.dispatch(StoreItemName(this.props.id, this.props.inputValue));
-          //console.log(this.props.id);
+         this.props.dispatch(createSet(this.props.id, setting));
+         this.props.dispatch(StoreItemName(this.props.id, this.props.inputValue));
+         //console.log(this.props.id);
       } else {
-          this.props.dispatch(deleteRemindItem(this.props.id));
-          this.props.dispatch(deleteNotify(this.props.id));
+         this.props.dispatch(deleteRemindItem(this.props.id));
+         this.props.dispatch(deleteNotify(this.props.id));
       }
-  }
-  saveItem() {
-   //console.log(this.props.id);
-   if (!this.props.inputValue) {
-       //console.log('fuck');
-       this.props.dispatch(itemDanger(this.props.id, true));
-       return false;
    }
-   //console.log(this.props.inputValue);
-   this.props.dispatch(StoreItemName(this.props.id, this.props.inputValue));
-   return true;
-   //this.props.dispatch(AllSafe());
+   saveItem() {
+      //console.log(this.props.id);
+      if (!this.props.inputValue) {
+         //console.log('fuck');
+         this.props.dispatch(itemDanger(this.props.id, true));
+         return false;
+      }
+      //console.log(this.props.inputValue);
+      this.props.dispatch(StoreItemName(this.props.id, this.props.inputValue));
+      return true;
+      //this.props.dispatch(AllSafe());
    }
-   
+
 
 
 
    handleItermName = (text) => {
-    this.setState({ itemName: text })
+      this.setState({ itemName: text })
    }
-/*
-   login = (email, pass) => {
-      alert('email: ' + email + ' password: ' + pass)
-   }
-*/
-   
+   /*
+      login = (email, pass) => {
+         alert('email: ' + email + ' password: ' + pass)
+      }
+   */
+
 }
 
 
@@ -159,8 +159,8 @@ export default connect((state, ownProps) => ({
 
 const styles = StyleSheet.create({
    container: {
-    flexDirection: "row",
-    padding: 20,
+      flexDirection: "row",
+      padding: 20,
    },
    input: {
       margin: 15,
@@ -170,30 +170,30 @@ const styles = StyleSheet.create({
       marginLeft: 0,
    },
    deleteButton: {
-    backgroundColor: '#ff0000',
-    padding: 10,
-    margin: 15,
-    height: 40,
-    marginRight: 0,
-    marginLeft: 0,
-    },
-    enterANDleavingButton: {
+      backgroundColor: '#ff0000',
+      padding: 10,
+      margin: 15,
+      height: 40,
+      marginRight: 0,
+      marginLeft: 0,
+   },
+   enterANDleavingButton: {
       backgroundColor: '#4A4444',
       padding: 10,
       margin: 15,
       height: 40,
       marginRight: 0,
       marginLeft: 0,
-    },
-    onPressedButton: {
+   },
+   onPressedButton: {
       backgroundColor: '#0000ff',
       padding: 10,
       margin: 15,
       height: 40,
       marginRight: 0,
       marginLeft: 0,
-    },
-   submitButtonText:{
+   },
+   submitButtonText: {
       color: 'white',
    }
 })
@@ -227,12 +227,12 @@ import {
 /*
  const EnterAndLeave = () => {
    const [selectedId, setSelectedId] = useState(null);
- 
+
    const renderItem = ({ item }) => {
       //const backgroundColor = item.isSelect ? "#0000ff" : "#4A4444";
      const backgroundColor = item.id === selectedId ? "#0000ff" : "#4A4444";
      const color = item.id === selectedId ? 'white' : 'white';
- 
+
      return (
        <Item
          item={item}
@@ -242,7 +242,7 @@ import {
        />
      );
    };
- 
+
    return (
      <SafeAreaView style={styles.container}>
        <FlatList

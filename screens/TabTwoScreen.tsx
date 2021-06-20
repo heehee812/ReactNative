@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-
+import {Container, Content} from 'native-base'
 import SwitchToggle from '../components/element/SwitchToggle';
 //import Inputs from '../components/element/TextInput';
 import RemindItem from '../components/element/modify/RemindItem';
@@ -8,22 +8,24 @@ import ListItem from '../components/element/modify/RemindItemList';
 import App from '../components/element/test';
 import { Text, View } from '../components/Themed';
 import { searchText, post, postForm, NotificationItem, postItem, reminder, remindItem } from '../components/states/post-reducers.js';
+import PostList from '../components/element/modify/PostList.jsx';
+import PostForm from '../components/element/modify/PostForm.jsx';
+import PostItem from '../components/element/modify/PostItem.jsx';
+
 
 
 export default function TabTwoScreen() {
   return (
-    <View style={styles.container}>
+    <Container style={styles.container}>
+      <Content>
       <Text style={styles.title}>Place</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <View style={styles.switchButton}>
-      <Text>Vibration</Text>
-      <SwitchToggle/></View>
-      
-      <RemindItem/>
-      <ListItem/>
-
+      <PostForm/>
+      <PostList/>
+      <PostItem/>
       <App/>
-    </View>
+      </Content>
+    </Container>
 
   );
 }

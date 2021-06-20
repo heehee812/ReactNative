@@ -10,24 +10,10 @@ import {
     View,
     TextInput
 } from 'react-native'
-import {
-    Alert,
-    Input,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
-    Button,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Popover,
-    PopoverHeader,
-    PopoverBody,
-} from 'reactstrap';
+
 import { connect } from 'react-redux';
 
-import { getMoodIcon } from 'utilities/weather.js';
+//import { getMoodIcon } from 'utilities/weather.js';
 
 import {
     createPost,
@@ -41,9 +27,10 @@ import {
     vibrateSetting,
     volumeDanger,
     typeFormSetting,
+    listRemindItem,
     mapOpen,
     setMap
-} from 'states/post-actions.js';
+} from '../../states/post-actions.js';
 
 //import './PostForm.css';
 import ListItem from './RemindItemList.jsx'
@@ -70,7 +57,12 @@ class PostForm extends React.Component {
         this.inputVol = null;
         this.locationTypeToggleEl = null;
         this.itemList = React.createRef();
-
+        this.Loactions = [
+            { text: "Cafe" },
+            { text: "Library" },
+            { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+        ];
+        this.ActionSheetRef = React.createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDropdownSelect = this.handleDropdownSelect.bind(this);
         this.handleLTToggle = this.handleLTToggle.bind(this);
@@ -88,17 +80,13 @@ class PostForm extends React.Component {
         let typeFormColor = isPersonal ? 'primary' : 'info';
         let vibColor = (vibration == true) ? 'primary' : 'secondary';
         let typeForm = undefined;
-        var BUTTONS = [
-            { text: "Cafe" },
-            { text: "Library" },
-            { text: "Cancel", icon: "close", iconColor: "#25de5b" }
-        ];
+
         if (isPersonal) {
             typeForm = (
                 <View>
-                    <View>Add a new Personal Place</View>
-                    <TextInput innerRef={el => { this.inputEl = el }} value={this.props.inputValue} onChangeText={this.handleInputChange} placeholder="Give a Name for this place" />
-                    <Button rounded success onPress={() => { this.handleLTToggle }}>
+                    <Text>Add a new Personal Place</Text>
+                    <TextInput innerRef={el => { this.inputEl = el }} value={this.props.inputValue} onChange={this.handleInputChange} placeholder="Give a Name for this place" />
+                    <Button rounded success onPress={this.handleLTToggle}>
                         <Text>Google Map</Text>
                     </Button>
                 </View>
@@ -107,20 +95,21 @@ class PostForm extends React.Component {
         } else {
             typeForm = (
                 <View>
-                    <View>Loaction Type :&nbsp;
-                        <Button onPress={() =>
+                    <View>
+                        <Button rounded onPress={() => {
                             ActionSheet.show(
                                 {
-                                    options: BUTTONS,
+                                    options: this.Loactions,
                                     cancelButtonIndex: 3,
                                     destructiveButtonIndex: 3,
-                                    title: "Location Type:"
+                                    title: 'Location Type:'
                                 },
                                 buttonIndex => {
-                                    this.handleDropdownSelect({ clicked: BUTTONS[buttonIndex].text });
+                                    this.handleDropdownSelect({ clicked: this.Loactions[buttonIndex].text });
                                 }
-                            )}>
-                            <Text>Select Location</Text>
+                            )
+                        }}>
+                            <Text>{locationType == 'na' ? 'Select Location Type' : locationType}</Text>
                         </Button>
                     </View>
                 </View >
@@ -131,28 +120,37 @@ class PostForm extends React.Component {
             <View>
                 <View>
                     <View>
-                        <Button onPress={() => { this.handleTypeForm }}><Text>{typeFormName}</Text></Button>
+                        <Button rounded onPress={this.handleTypeForm}><Text>{typeFormName}</Text></Button>
                         {typeForm}
                         <View>
-                            <Button onPress={() => { this.handleVibrate }}><Text>Vibration: {vibtext}</Text></Button>
+                            <Button rounded onPress={this.handleVibrate}><Text>Vibration: {vibtext}</Text></Button>
                             <Text>Volume:
                                 <TextInput placeholder="0-100" innerRef={el => { this.inputVol = el }} value={this.props.volume} onChange={this.handleVolumeChange} />
                             </Text>
                         </View>
                         <ListItem childRef={ref => (this.itemList = ref)} />{
                             remindItemLoading &&
-                            <View color='warning' className='loading'>Loading...</View>
+                            <Text>Loading...</Text>
                         }
                     </View>
-                    <Button onPress={() => { this.handlePost }}><Text>Set</Text></Button>
+                    <Button rounded onPress={this.handlePost}><Text>Set</Text></Button>
                 </View>
             </View>
         );
     }
-
+    componentDidMount() {
+        const FormRef = () => this.props;
+        FormRef(this);
+        this.props.dispatch(listRemindItem());
+    }
+    componentWillUnmount() {
+        const FormRef = () => this.props;
+        FormRef(undefined);
+    }
     handleTypeForm() {
         this.props.dispatch(setlocationTypeToggle(false));
         this.props.dispatch(typeFormSetting());
+        //console.log('set Type of form');
     }
 
     handleVibrate() {
@@ -161,7 +159,11 @@ class PostForm extends React.Component {
     }
 
     handleDropdownSelect(locationType) {
-        this.props.dispatch(selectlocationType(locationType));
+        //console.log(locationType);
+        if (locationType.clicked != 'Cancel')
+            this.props.dispatch(selectlocationType(locationType.clicked));
+        else
+            this.props.dispatch(selectlocationType('na'));
     }
 
     handleInputChange(e) {
@@ -212,6 +214,11 @@ class PostForm extends React.Component {
         if (!this.props.volume) {
             this.props.dispatch(volumeDanger(true));
             bad = true;
+        }
+        //console.log(this.itemList);
+        if (this.itemList.current == null) { //Null
+            console.log('No receive reference from itemlist');
+            return; //abort
         }
         let itemGood = this.itemList.saveWholeList();
         //console.log(locationType);

@@ -9,20 +9,20 @@ import {
 } from 'react-native';
 
 import {
-    Collapse, 
-    CollapseHeader, 
-    CollapseBody, 
+    Collapse,
+    CollapseHeader,
+    CollapseBody,
     AccordionList
 } from 'accordion-collapse-react-native';
 
-import { Table, Row } from 'react-native-table-component';
+//import { Table, Row } from 'react-native-table-component';
 import { connect } from 'react-redux';
 //import moment from 'moment';
 
 //import { getMoodIcon } from 'utilities/weather.js';
-import { deletePost, setIsOpen, OpenCard } from 'states/post-actions.js';
+import { deletePost, setIsOpen, OpenCard } from '../../states/post-actions.js';
 
-import './PostItem.css';
+//import './PostItem.css';
 //import View from 'react-native-gesture-handler/lib/typescript/GestureHandlerRootView';
 
 class PostItem extends React.Component {
@@ -53,31 +53,33 @@ class PostItem extends React.Component {
         let header = isPersonal ? Name : locationType
         let iconColor = isPersonal ? 'dodgerblue' : 'darkturquoise';
         console.log(reminding);
-        if (reminding.length) {
-            const itemTableHead = <Row data = {['Item Name Notify As', 'Entering', 'Leaving']}/>;
-            //console.log(reminding);
-            const itemTableBody = reminding.map(item => (
-                //console.log(item)
-                <Row data = {[item.name, item.leaving ? 'V' : 'X', item.entering ? 'V' : 'X']}/>
-            ));
-            //console.log(itemTableBody);
-            itemTable = (
-                <Table>
-                    {itemTableHead}
-                    {itemTableBody}
-                </Table>
-            );
+        if (reminding != undefined) {
+            if (reminding.length) {
+                const itemTableHead = <Text>ItemName Notify as Leaving Entering</Text>
+                //console.log(reminding);
+                const itemTableBody = reminding.map(item => (
+                    //console.log(item)
+                    <Text>{item.name}{item.leaving ? 'V' : 'X'}{item.entering ? 'V' : 'X'}</Text>
+                ));
+                //console.log(itemTableBody);
+                itemTable = (
+                    <View>
+                        {itemTableHead}
+                        {itemTableBody}
+                    </View>
+                );
+            }
         }
 
         let vibtext = vibrate ? 'on' : 'Off';
 
         return (
-            <Collapse style = {styles.container}>
+            <Collapse style={styles.container}>
                 <CollapseHeader isExpanded={this.props.isOpen} onToggle={this.handleOpen}>
-                    <TouchableWithoutFeedback style = {{backgroundColor: {iconColor}, height: 1, width: 1}}/>
-                    <View>{header}</View>
-                    <View>Vol:&nbsp;{volume}%&nbsp;,&nbsp;vibrate:&nbsp;{vibtext}</View>
-                    <TouchableOpacity style = {styles.buttonStyle} onPress={this.handleX}>
+                    <TouchableWithoutFeedback style={{ backgroundColor: { iconColor }, height: 1, width: 1 }} />
+                    <Text>{header}</Text>
+                    <Text>Vol:&nbsp;{volume}%&nbsp;,&nbsp;vibrate:&nbsp;{vibtext}</Text>
+                    <TouchableOpacity style={styles.buttonStyle} onPress={this.handleX}>
                         <Text>X</Text>
                     </TouchableOpacity>
                 </CollapseHeader>
@@ -103,14 +105,11 @@ export default connect((state, ownProps) => ({
 
 
 const styles = StyleSheet.create({
-    buttonStyle:{
-        color="#ff0000",
+    buttonStyle: {
+        color: "#ff0000",
         height: 3,
         width: 3,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    container:{
-
     }
-});
+})

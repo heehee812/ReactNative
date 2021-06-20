@@ -14,7 +14,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 
 import { Provider } from 'react-redux'
-
+import {Root} from 'native-base'
 import { createStore } from 'redux';
 
 import thunkMiddleware from 'redux-thunk';
@@ -53,11 +53,13 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
   return (
     <Provider store={store}>
+      <Root>
       <NavigationContainer
         linking={LinkingConfiguration}
         theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <RootNavigator />
       </NavigationContainer>
+      </Root>
     </Provider>
   );
 }

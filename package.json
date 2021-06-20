@@ -21,6 +21,7 @@
     "@react-navigation/bottom-tabs": "5.11.2",
     "@react-navigation/native": "~5.8.10",
     "@react-navigation/stack": "~5.12.8",
+    "accordion-collapse-react-native": "^1.0.1",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.23.0",
     "expo": "~41.0.1",
@@ -40,6 +41,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-elements": "^0.19.1",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-paper": "^4.9.1",
     "react-native-reactstrap": "^1.0.4",
     "react-native-reanimated": "~2.1.0",
@@ -64,5 +66,10 @@
     "jest-expo": "~41.0.0",
     "typescript": "~4.0.0"
   },
-  "private": true
+  "private": true,
+  "name": "whereverur",
+  "description": "(1) $expo init <your project name>  \r (2) 下載這個 repository 的檔案到本地端(git clone 或直接下載)，並取代 expo init <your project name>同樣名字的檔案和資料夾  \r (3) $expo start 或是 $expo start --tunnel  \r (4) 開啟 emulator (eg. browser, android 模擬器, android 手機等)  \r (5) Used native-base: npm install native-base --save\r (6) Used accordion-collapse-react-native: npm install --save accordion-collapse-react-native\r (7) Used Table Components: npm install react-native-table-component",
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC"
 }

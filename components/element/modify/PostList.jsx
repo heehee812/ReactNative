@@ -4,13 +4,13 @@ import {
     List, ListItem
 } from 'native-base';
 
-import { StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { connect } from 'react-redux';
 
 //import NotificationItem from 'components/NotificationItem.jsx';
-import PostItem from 'components/PostItem.jsx';
+import PostItem from './PostItem';
 
-import './PostList.css';
+//import './PostList.css';
 
 class PostList extends React.Component {
     static PropTypes = {
@@ -30,8 +30,9 @@ class PostList extends React.Component {
         if (!posts) posts = [];
 
         let children = (
-            <ListItem className='empty d-flex justify-content-center align-items-center'>
-                <Text className='empty-text'>No post here.<br />Go add some posts.</Text>
+            <ListItem>
+                <Text>No post here.</Text>
+                <Text>Go add some posts.</Text>
             </ListItem>
         );
         if (posts.length) {
@@ -43,7 +44,7 @@ class PostList extends React.Component {
         }
         console.log(posts);
         return (
-            <View className='post-list'>
+            <View>
                 <List>
                     {children}
                 </List>
@@ -60,7 +61,7 @@ class PostList extends React.Component {
 export default connect(state => ({
     posts: state.post.posts == undefined ? [] : state.post.posts,
     hasMore: state.post.hasMore == undefined ? false : state.post.hasMore,
-    searchText: state.searchText == undefined ? '' : state.searchText, 
+    searchText: state.searchText == undefined ? '' : state.searchText,
 }))(PostList);
 
 
